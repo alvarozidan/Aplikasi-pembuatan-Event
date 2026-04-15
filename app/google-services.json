@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "913043432845",
+    "project_id": "schoolevent-fc50c",
+    "storage_bucket": "schoolevent-fc50c.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:913043432845:android:12de2bfe7eb1c7c14d49c4",
+        "android_client_info": {
+          "package_name": "com.example.schoolevent"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDMMLcgCDvjneFu3vUIlLf23oi8acYl4ek"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
