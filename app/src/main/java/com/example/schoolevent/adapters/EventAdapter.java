@@ -32,11 +32,10 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
     @Override
     public EventViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_event, parent, false);  // ← titik koma di sini
+                .inflate(R.layout.item_event, parent, false);
         return new EventViewHolder(view);
     }
-
-    @Override  // ← jangan lupa @Override
+    @Override
     public void onBindViewHolder(@NonNull EventViewHolder holder, int position) {
         Event event = eventList.get(position);
 
@@ -45,7 +44,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         holder.tvCategory.setText(event.getCategory());
         holder.tvDescription.setText(event.getDescription());
 
-        holder.itemView.setOnClickListener(v -> {  // ← "Click" bukan "CLick"
+        holder.itemView.setOnClickListener(v -> {
             if (listener != null) {
                 listener.onEventClick(event);
             }
@@ -62,17 +61,15 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         notifyDataSetChanged();
     }
 
-    // ← extends RecyclerView.ViewHolder wajib ada
     public static class EventViewHolder extends RecyclerView.ViewHolder {
 
-        // ← Deklarasi variabel di dalam class, bukan di constructor
         TextView tvTitle, tvDate, tvCategory, tvDescription;
 
         public EventViewHolder(@NonNull View itemView) {
             super(itemView);
             // ← "itemView" bukan "item.view"
             tvTitle = itemView.findViewById(R.id.tv_title);
-            tvDate = itemView.findViewById(R.id.tv_date);        // ← tvDate bukan tvTitle
+            tvDate = itemView.findViewById(R.id.tv_date);
             tvCategory = itemView.findViewById(R.id.tv_category);
             tvDescription = itemView.findViewById(R.id.tv_description);
         }
