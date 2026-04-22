@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.schoolevent.R;
 import com.example.schoolevent.activities.DetailActivity;
@@ -33,7 +34,7 @@ public class HomeFragment extends Fragment {
     private RecyclerView rvEvents;
     private TextView tvEmpty;
     private FloatingActionButton fabAddEvent;
-
+    private SwipeRefreshLayout swipeRefresh;
     private EventAdapter adapter;
     private List<Event> eventList = new ArrayList<>();
 
@@ -57,6 +58,7 @@ public class HomeFragment extends Fragment {
         rvEvents = view.findViewById(R.id.rv_events);
         tvEmpty = view.findViewById(R.id.tv_empty);
         fabAddEvent = view.findViewById(R.id.fab_add_event);
+        swipeRefresh = view.findViewById(R.id.swipe_refresh);
 
         rvEvents.setLayoutManager(new LinearLayoutManager(getContext()));
 
@@ -72,6 +74,20 @@ public class HomeFragment extends Fragment {
 
         rvEvents.setAdapter(adapter);
 
+        //Setup warna indikator loading refresh
+        swipeRefresh.setColorSchemeResources(
+                android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light
+        );
+
+        // Listener pull to refresh
+        // Saat user tarik ke bawah → loadEvents() dipanggil ulang
+        swipeRefresh.setOnRefreshListener(() -> {
+            loadEvents();
+            checkAdminStatus();
+        });
+
         checkAdminStatus();
         loadEvents();
 
@@ -84,10 +100,15 @@ public class HomeFragment extends Fragment {
     public void onResume(){
         super.onResume();
         loadEvents();
+        checkAdminStatus();
     }
 
     private void checkAdminStatus(){
         FirebaseUser currentUser = mAuth.getCurrentUser();
+
+        // Reset FAB dulu ke hidden setiap kali cek
+        // Penting! Agar FAB hilang saat logout
+        fabAddEvent.setVisibility(View.GONE);
 
         if(currentUser == null){
             Log.d("ADMIN CHECK", "User tidak login");
@@ -133,6 +154,9 @@ public class HomeFragment extends Fragment {
 
                     adapter.updateData(eventList);
 
+                    //Hentikan animasi loading refresh
+                    swipeRefresh.setRefreshing(false);
+
                     if(eventList.isEmpty()){
                         tvEmpty.setVisibility(View.VISIBLE);
                         rvEvents.setVisibility(View.GONE);
@@ -142,6 +166,8 @@ public class HomeFragment extends Fragment {
                     }
                 })
                 .addOnFailureListener(e -> {
+                    //Kalau gagal load juga dihentiin
+                    swipeRefresh.setRefreshing(false);
                     Toast.makeText(getContext(),
                             "Gagal memuat event: " + e.getMessage(),
                             Toast.LENGTH_SHORT).show();
