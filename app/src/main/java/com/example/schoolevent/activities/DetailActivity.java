@@ -47,7 +47,7 @@ public class DetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activuty_detail);
+        setContentView(R.layout.activity_detail);
 
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();

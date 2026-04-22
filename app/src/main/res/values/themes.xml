@@ -2,8 +2,15 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.SchoolEvent" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryVariant">@color/primary_dark</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSecondary">@color/secondary</item>
+        <item name="colorOnSecondary">@color/white</item>
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
 
+    <!-- Tema utama → mewarisi Base.Theme.SchoolEvent -->
+    <!-- Semua konfigurasi diwarisi dari Base theme di atas -->
     <style name="Theme.SchoolEvent" parent="Base.Theme.SchoolEvent" />
 </resources>
