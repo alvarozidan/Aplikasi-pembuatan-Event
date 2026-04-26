@@ -33,7 +33,12 @@ android {
 }
 
 dependencies {
+    // Glide → untuk load & tampilkan gambar dari URL/storage
+    // CalendarView Material → kalender yang lebih bagus
 
+    implementation("com.github.bumptech.glide:glide:4.16.0")
+    implementation("com.google.firebase:firebase-storage")
+    implementation("com.prolificinteractive:material-calendarview:1.4.3")
     implementation("androidx.appcompat:appcompat:1.7.1")
     implementation("com.google.android.material:material:1.13.0")
     implementation("androidx.constraintlayout:constraintlayout:2.2.1")
