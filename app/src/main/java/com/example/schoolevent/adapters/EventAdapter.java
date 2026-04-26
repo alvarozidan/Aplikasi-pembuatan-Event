@@ -48,6 +48,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         holder.tvDate.setText(event.getDate());
         holder.tvCategory.setText(event.getCategory());
         holder.tvDescription.setText(event.getDescription());
+        holder.tvCommentCount.setText(String.valueOf(event.getCommentCount()));
 
         //Hitung jumlah like
         int likeCount = event.getLikes() != null ? event.getLikes().size() : 0;
@@ -62,31 +63,41 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
                 && event.getLikes() != null
                 && event.getLikes().contains(currentUid);
 
+        // PENTING: Reset listener dulu sebelum set yang baru
+        // Mencegah listener lama menempel saat ViewHolder di-recycle
+        holder.layoutLike.setOnLongClickListener(null);
+        holder.layoutComment.setOnLongClickListener(null);
+        holder.itemView.setOnLongClickListener(null);
+
         //Ubah ikon status
         holder.tvLikeIcon.setText(isLiked ? "❤" : "🤍");
 
+        // Simpan uid ke final variable agar bisa dipakai di lambda
+        final String uid = currentUid;
+        final Event currentEvent = event;
+
         //Listener klik like
         holder.layoutLike.setOnClickListener(v -> {
-            if(currentUid == null){
+            if(uid == null){
                 //Belum login = gak bisa like
-                android.widget.Toast.makeText(v.getContext(),
+                Toast.makeText(v.getContext(),
                         "Login dulu buat like",
                         Toast.LENGTH_SHORT).show();
                 return;
             }
-            toggleLike(event, currentUid, holder);
+            toggleLike(event, uid, holder);
         });
 
         //Listener klik komentar (ini buka detail event)
         holder.layoutComment.setOnClickListener(v -> {
-            if (listener != null) listener.onEventClick(event);
+            if (listener != null) listener.onEventClick(currentEvent);
         });
 
         //Listener klik kartu (ini juga buka detail event)
 
         holder.itemView.setOnClickListener(v -> {
             if (listener != null) {
-                listener.onEventClick(event);
+                listener.onEventClick(currentEvent);
             }
         });
     }

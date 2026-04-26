@@ -12,11 +12,26 @@
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/colorPrimary"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
             app:titleTextColor="@android:color/white"
             app:navigationIcon="@drawable/ic_arrow_back"/>
 
     </com.google.android.material.appbar.AppBarLayout>
+
+    <!--
+        NestedScrollView → konten yang bisa di-scroll
+        layout_marginBottom="80dp" → beri ruang untuk input komentar di bawah
+    -->
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="90dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+
+    </androidx.core.widget.NestedScrollView>
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -71,7 +86,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="14sp"
-                    android:textColor="#555555"
+                    android:textColor="?android:attr/textColorSecondary"
                     android:text="01 Januari 2026" />
 
             </LinearLayout>
@@ -80,7 +95,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#EEEEEE"
+                android:background="?android:attr/listDivider"
                 android:layout_marginBottom="16dp" />
 
             <TextView
@@ -96,7 +111,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
-                android:textColor="#444444"
+                android:textColor="?android:attr/textColorSecondary"
                 android:lineSpacingMultiplier="1.5"
                 android:layout_marginBottom="24dp"
                 android:text="Deskripsi Event" />
@@ -104,7 +119,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#EEEEEE"
+                android:background="?android:attr/listDivider"
                 android:layout_marginBottom="16dp" />
 
             <TextView
@@ -128,40 +143,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Belum ada komentar"
-                android:textColor="#888888"
+                android:textColor="?android:attr/textColorSecondary"
                 android:layout_marginBottom="16dp"
                 android:visibility="gone" />
-
-            <LinearLayout
-                android:id="@+id/layout_comment_input"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="gone">
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Tulis Komentar"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_marginBottom="8dp">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/et_comment"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="textImeMultiLine"
-                        android:minLines="2" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_send_comment"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="end"
-                    android:text="Kirim" />
-            </LinearLayout>
 
 <!--            muncul tombol login kalau belum login saat ingin komentar-->
             <com.google.android.material.button.MaterialButton
@@ -184,5 +168,59 @@
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
+
+    <!--
+        Input komentar → posisi FIXED di bawah layar
+        layout_gravity="bottom" → selalu nempel di bawah
+        Tidak ikut scroll karena berada di luar NestedScrollView
+    -->
+    <LinearLayout
+        android:id="@+id/layout_comment_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:orientation="horizontal"
+        android:padding="12dp"
+        android:gravity="center_vertical"
+        android:background="?android:attr/windowBackground"
+        android:elevation="8dp"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/bg_comment_input"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingStart="16dp"
+            android:paddingEnd="8dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:layout_marginEnd="8dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_comment"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Tulis Komentar..."
+            android:inputType="textMultiLine"
+            android:maxLines="3"
+            android:background="@android:color/transparent"
+            android:textSize="14sp"/>
+
+        </LinearLayout>
+
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btn_send_comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/ic_menu_send"
+            app:fabSize="mini"
+            android:contentDescription="Kirim" />
+
+    </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

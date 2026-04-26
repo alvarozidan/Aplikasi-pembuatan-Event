@@ -76,6 +76,7 @@ public class LoginFragment extends Fragment {
                                 Toast.LENGTH_SHORT).show();
 
                         ((MainActivity) requireActivity()).updateNavbar();
+                        ((MainActivity) requireActivity()).setNavbarSelected(R.id.nav_home);
                         ((MainActivity) requireActivity()).loadFragment(new HomeFragment());
                     }else {
                         String errorMsg = task.getException() != null

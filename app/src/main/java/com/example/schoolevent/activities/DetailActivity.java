@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,10 +16,13 @@ import com.example.schoolevent.R;
 import com.example.schoolevent.adapters.CommentAdapter;
 import com.example.schoolevent.models.Comment;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -30,9 +34,10 @@ public class DetailActivity extends AppCompatActivity {
     private TextView tvTitle, tvDate, tvCategory, tvDescription;
     private TextView tvNoComments;
     private RecyclerView rvComments;
-    private View layoutCommentInput;
+    private LinearLayout layoutCommentInput;
     private TextInputEditText etComment;
-    private MaterialButton btnSendComment, btnLoginToComment, btnDeleteEvent;
+    private MaterialButton  btnLoginToComment, btnDeleteEvent;
+    private FloatingActionButton btnSendComment;
     private Toolbar toolbar;
 
     //Ini buat data event yang akan diterima dari Intent
@@ -43,6 +48,7 @@ public class DetailActivity extends AppCompatActivity {
 
     private CommentAdapter commentAdapter;
     private List<Comment> commentList = new ArrayList<>();
+    private ListenerRegistration commentsListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,7 +102,7 @@ public class DetailActivity extends AppCompatActivity {
         setupCommentSection();
         checkAdminStatus();
 
-        loadComments();
+        loadCommentsRealTime();
 
         btnSendComment.setOnClickListener(v -> sendComment());
 
@@ -113,6 +119,14 @@ public class DetailActivity extends AppCompatActivity {
             finish();
             return true;
         }
+
+        @Override
+        protected void onDestroy(){
+        super.onDestroy();
+        if(commentsListener != null){
+            commentsListener.remove();
+        }
+    }
 
         private void setupCommentSection(){
             FirebaseUser currentUser = mAuth.getCurrentUser();
@@ -146,19 +160,26 @@ public class DetailActivity extends AppCompatActivity {
                     });
         }
 
-        private void loadComments(){
+        private void loadCommentsRealTime(){
             // Query → mengambil data dengan kondisi tertentu
             // whereEqualTo("eventId", eventId) → hanya ambil komentar milik event ini
             // orderBy("timestamp", ASCENDING) → urutkan dari komentar terlama
 
-            db.collection("comments")
+            commentsListener = db.collection("comments")
                     .whereEqualTo("eventId", eventId)
                     .orderBy("timestamp", Query.Direction.ASCENDING)
-                    .get()
-                    .addOnSuccessListener(queryDocumentSnapshots -> {
+                    .addSnapshotListener((snapshots, error) -> {
+                        if(error != null){
+                            Toast.makeText(this,
+                                    "Gagal memuat komentar: " +error.getMessage(),
+                                    Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        if(snapshots == null){ return; }
+
                         commentList.clear();
 
-                        for (QueryDocumentSnapshot doc : queryDocumentSnapshots){
+                        for (QueryDocumentSnapshot doc : snapshots){
                             Comment comment = doc.toObject(Comment.class);
                             comment.setCommentId(doc.getId());
                             commentList.add(comment);
@@ -172,12 +193,8 @@ public class DetailActivity extends AppCompatActivity {
                         }else {
                             tvNoComments.setVisibility(View.GONE);
                         }
-                    })
-                    .addOnFailureListener(e -> {
-                        Toast.makeText(this,
-                                "Gagal memuat komentar : " + e.getMessage(),
-                                Toast.LENGTH_SHORT).show();
                     });
+
         }
 
         private void sendComment(){
@@ -215,11 +232,10 @@ public class DetailActivity extends AppCompatActivity {
                                 .addOnSuccessListener(documentReference -> {
                                     //Kosongkan input setelah berhasil dikirim
                                     etComment.setText("");
-                                    Toast.makeText(this,
-                                            "Komentar Terkirim!",
-                                            Toast.LENGTH_SHORT).show();
-                                    //refresh list komentar
-                                    loadComments();
+                                    //Update commentCount Event
+                                    db.collection("events")
+                                                    .document(eventId)
+                                                            .update("commentCount", FieldValue.increment(1));
                                 })
                                 .addOnFailureListener(e -> {
                                     Toast.makeText(this,
@@ -235,7 +251,7 @@ public class DetailActivity extends AppCompatActivity {
             new AlertDialog.Builder(this)
                     .setTitle("Hapus Event")
                     .setMessage("Yakin ingin menghapus event ini?")
-                    .setPositiveButton("Ya, Hapus", (dialog, which) -> deleteEvent())
+                    .setPositiveButton("Hapus", (dialog, which) -> deleteEvent())
                     .setNegativeButton("Batal", null)
                     .show();
         }

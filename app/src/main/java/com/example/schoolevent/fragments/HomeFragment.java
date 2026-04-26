@@ -26,6 +26,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.ListenerRegistration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +38,10 @@ public class HomeFragment extends Fragment {
     private SwipeRefreshLayout swipeRefresh;
     private EventAdapter adapter;
     private List<Event> eventList = new ArrayList<>();
+
+    // ListenerRegistration → menyimpan referensi listener realtime
+    // Dipakai untuk menghentikan listener saat fragment tidak aktif
+    private ListenerRegistration eventsListener;
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
@@ -140,39 +145,46 @@ public class HomeFragment extends Fragment {
                 });
     }
 
-    private void loadEvents(){
-        db.collection("events")
-                .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
+    private void loadEvents() {
+        eventsListener = db.collection("events")
+                .addSnapshotListener((snapshots, error) -> {
+                    //Hentikan loading
+                    swipeRefresh.setRefreshing(false);
+
+                    if (error != null) {
+                        Toast.makeText(getContext(),
+                                "Gagal memuat event: " + error.getMessage(),
+                                Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    if (snapshots == null) return;
                     eventList.clear();
 
-                    for(QueryDocumentSnapshot doc: queryDocumentSnapshots){
+                    for (QueryDocumentSnapshot doc : snapshots) {
                         Event event = doc.toObject(Event.class);
                         event.setEventId(doc.getId());
                         eventList.add(event);
                     }
-
                     adapter.updateData(eventList);
 
-                    //Hentikan animasi loading refresh
-                    swipeRefresh.setRefreshing(false);
-
-                    if(eventList.isEmpty()){
+                    if (eventList.isEmpty()) {
                         tvEmpty.setVisibility(View.VISIBLE);
                         rvEvents.setVisibility(View.GONE);
-                    }else{
+                    } else {
                         tvEmpty.setVisibility(View.GONE);
                         rvEvents.setVisibility(View.VISIBLE);
                     }
-                })
-                .addOnFailureListener(e -> {
-                    //Kalau gagal load juga dihentiin
-                    swipeRefresh.setRefreshing(false);
-                    Toast.makeText(getContext(),
-                            "Gagal memuat event: " + e.getMessage(),
-                            Toast.LENGTH_SHORT).show();
+
                 });
     }
 
-
+    @Override
+    public void onDestroyView(){
+        super.onDestroyView();
+        // Hentikan listener realtime saat fragment tidak aktif
+        // Mencegah memory leak & error saat fragment sudah destroy
+        if(eventsListener != null){
+            eventsListener.remove();
+        }
+    }
 }

@@ -13,6 +13,7 @@ public class Event {
     // List userId yang sudah like event ini
     // Menyimpan UID user agar 1 user hanya bisa like 1 kali
     private List<String> likes;
+    private long commentCount;
 
     public Event(){
         likes = new ArrayList<>();
@@ -33,6 +34,8 @@ public class Event {
     public String getCategory(){ return  category; }
     public String getDescription(){ return description; }
     public List<String> getLikes(){ return likes; }
+    public long getCommentCount(){ return commentCount; }
+
 
     public void setEventId(String eventId){ this.eventId = eventId; }
     public void  setTitle(String title){ this.title = title; }
@@ -40,4 +43,6 @@ public class Event {
     public void  setCategory(String category){ this.category = category; }
     public void setDescription(String description){ this.description = description; }
     public void setLikes (List<String> likes) { this.likes = likes; }
+    public void setCommentCount(long commentCount ){ this.commentCount = commentCount; }
+
 }
