@@ -1,12 +1,22 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.SchoolEvent" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Base.Theme.SchoolEvent"
+        parent="Theme.Material3.DayNight.NoActionBar">
         <item name="colorPrimary">@color/primary_dark_theme</item>
         <item name="colorPrimaryVariant">@color/primary_dark</item>
         <item name="colorOnPrimary">@color/white</item>
         <item name="colorSecondary">@color/secondary</item>
         <item name="colorOnSecondary">@color/white</item>
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <item name="android:colorBackground">@color/bg_dark</item>
+        <item name="colorSurface">@color/surface_dark</item>
+        <item name="android:fontFamily">@font/poppins</item>
+        <item name="fontFamily">@font/poppins</item>
     </style>
+
+    <!-- Tambahkan ini sebelum tag </resources> penutup -->
+    <style name="Theme.SchoolEvent.Splash" parent="Base.Theme.SchoolEvent">
+        <item name="android:windowBackground">@color/primary</item>
+    </style>
+
+    <style name="Theme.SchoolEvent" parent="Base.Theme.SchoolEvent"/>
 </resources>

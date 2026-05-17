@@ -1,31 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    >
-
-    <!--
-       layout_weight="1" → FrameLayout mengisi semua sisa ruang
-       setelah BottomNavigationView mengambil ruang nya
-       Sehingga konten tidak pernah tertutup navbar
-   -->
+    android:background="?android:attr/windowBackground">
 
     <FrameLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"
-        />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom_navigation"
+    <!--
+        Wrapper transparan → hanya untuk padding luar
+        Tidak ada background sama sekali
+    -->
+    <FrameLayout
+        android:id="@+id/navbar_wrapper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:background="?android:attr/windowBackground"
-        app:menu="@menu/bottom_nav_menu"/>
+        android:paddingStart="32dp"
+        android:paddingEnd="32dp"
+        android:paddingBottom="20dp"
+        android:paddingTop="8dp"
+        android:background="@android:color/transparent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
-</LinearLayout>
+        <!--
+            BlurView berbentuk oval
+            outlineProvider + clipToOutline → memotong blur jadi oval
+            Tidak ada kotak di belakang
+        -->
+        <eightbitlab.com.blurview.BlurView
+            android:id="@+id/blur_navbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:outlineProvider="background"
+            android:clipToOutline="true"
+            android:background="@drawable/bg_navbar_oval"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp">
+
+            <com.google.android.material.bottomnavigation.BottomNavigationView
+                android:id="@+id/bottom_navigation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:elevation="0dp"
+                app:itemIconTint="@color/nav_item_color"
+                app:itemTextColor="@color/nav_item_color"
+                app:labelVisibilityMode="selected"
+                app:menu="@menu/bottom_nav_menu"/>
+
+        </eightbitlab.com.blurview.BlurView>
+
+    </FrameLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -3,11 +3,13 @@ package com.example.schoolevent.adapters;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.core.content.ContextCompat;
 
 import com.example.schoolevent.R;
 import com.example.schoolevent.models.Event;
@@ -39,6 +41,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
                 .inflate(R.layout.item_event, parent, false);
         return new EventViewHolder(view);
     }
+
     @Override
     public void onBindViewHolder(@NonNull EventViewHolder holder, int position) {
         Event event = eventList.get(position);
@@ -50,11 +53,11 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         holder.tvDescription.setText(event.getDescription());
         holder.tvCommentCount.setText(String.valueOf(event.getCommentCount()));
 
-        //Hitung jumlah like
+        // Hitung jumlah like
         int likeCount = event.getLikes() != null ? event.getLikes().size() : 0;
         holder.tvLikeCount.setText(String.valueOf(likeCount));
 
-        //Cek udah like apa blom
+        // Cek udah like apa belom
         String currentUid = FirebaseAuth.getInstance().getCurrentUser() != null
                 ? FirebaseAuth.getInstance().getCurrentUser().getUid()
                 : null;
@@ -69,17 +72,26 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         holder.layoutComment.setOnLongClickListener(null);
         holder.itemView.setOnLongClickListener(null);
 
-        //Ubah ikon status
-        holder.tvLikeIcon.setText(isLiked ? "❤" : "🤍");
+        if (isLiked) {
+            holder.ivLikeIcon.setImageResource(R.drawable.ic_favorite);
+            holder.ivLikeIcon.setColorFilter(
+                    ContextCompat.getColor(holder.itemView.getContext(), android.R.color.holo_red_light)
+            );
+        } else {
+            holder.ivLikeIcon.setImageResource(R.drawable.ic_favorite_border);
+            holder.ivLikeIcon.clearColorFilter();
+        }
+
+        holder.ivLikeIcon.setSelected(isLiked);
 
         // Simpan uid ke final variable agar bisa dipakai di lambda
         final String uid = currentUid;
         final Event currentEvent = event;
 
-        //Listener klik like
+        // Listener klik like
         holder.layoutLike.setOnClickListener(v -> {
-            if(uid == null){
-                //Belum login = gak bisa like
+            if (uid == null) {
+                // Belum login = gak bisa like
                 Toast.makeText(v.getContext(),
                         "Login dulu buat like",
                         Toast.LENGTH_SHORT).show();
@@ -88,13 +100,12 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
             toggleLike(event, uid, holder);
         });
 
-        //Listener klik komentar (ini buka detail event)
+        // Listener klik komentar (buka detail event)
         holder.layoutComment.setOnClickListener(v -> {
             if (listener != null) listener.onEventClick(currentEvent);
         });
 
-        //Listener klik kartu (ini juga buka detail event)
-
+        // Listener klik kartu (juga buka detail event)
         holder.itemView.setOnClickListener(v -> {
             if (listener != null) {
                 listener.onEventClick(currentEvent);
@@ -112,41 +123,56 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         notifyDataSetChanged();
     }
 
-    private void toggleLike(Event event, String uid, EventViewHolder holder){
+    private void toggleLike(Event event, String uid, EventViewHolder holder) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         boolean isLiked = event.getLikes() != null && event.getLikes().contains(uid);
 
-        if (isLiked){
+        // Nonaktifkan klik sementara mencegah double tap
+        holder.layoutLike.setEnabled(false);
+
+        if (isLiked) {
             // Sudah like → unlike
-            // FieldValue.arrayRemove → hapus uid dari array likes di Firestore
             db.collection("events").document(event.getEventId())
                     .update("likes", FieldValue.arrayRemove(uid))
                     .addOnSuccessListener(aVoid -> {
                         event.getLikes().remove(uid);
-                        holder.tvLikeIcon.setText("🤍");
+                        // GANTI: setText("🤍") → setImageResource
+                        holder.ivLikeIcon.setImageResource(R.drawable.ic_favorite_border);
+                        holder.ivLikeIcon.clearColorFilter();
+                        holder.ivLikeIcon.setSelected(false);
                         holder.tvLikeCount.setText(
-                                String.valueOf(event.getLikes().size())
-                        );
-                    });
-        } else{
+                                String.valueOf(event.getLikes().size()));
+                        holder.layoutLike.setEnabled(true);
+                    })
+                    .addOnFailureListener(e ->
+                            holder.layoutLike.setEnabled(true));
+        } else {
             // Belum like → like
-            // FieldValue.arrayUnion → tambahkan uid ke array likes di Firestore
             db.collection("events").document(event.getEventId())
                     .update("likes", FieldValue.arrayUnion(uid))
                     .addOnSuccessListener(aVoid -> {
-                        event.getLikes().remove(uid);
-                        holder.tvLikeIcon.setText("🤍");
-                        holder.tvLikeCount.setText(
-                                String.valueOf(event.getLikes().size())
+                        event.getLikes().add(uid);
+                        // GANTI: setText("❤") → setImageResource
+                        holder.ivLikeIcon.setImageResource(R.drawable.ic_favorite);
+                        holder.ivLikeIcon.setColorFilter(
+                                ContextCompat.getColor(holder.itemView.getContext(), android.R.color.holo_red_light)
                         );
-                    });
+                        holder.ivLikeIcon.setSelected(true);
+                        holder.ivLikeIcon.setSelected(true);
+                        holder.tvLikeCount.setText(
+                                String.valueOf(event.getLikes().size()));
+                        holder.layoutLike.setEnabled(true);
+                    })
+                    .addOnFailureListener(e ->
+                            holder.layoutLike.setEnabled(true));
         }
     }
 
     public static class EventViewHolder extends RecyclerView.ViewHolder {
 
-        TextView tvTitle,tvTitleBanner, tvDate, tvCategory;
-        TextView tvDescription, tvLikeCount, tvLikeIcon, tvCommentCount;
+        TextView tvTitle, tvTitleBanner, tvDate, tvCategory;
+        TextView tvDescription, tvLikeCount, tvCommentCount;
+        ImageView ivLikeIcon; // GANTI: TextView tvLikeIcon → ImageView ivLikeIcon
         View layoutLike, layoutComment;
 
         public EventViewHolder(@NonNull View itemView) {
@@ -157,7 +183,8 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
             tvCategory = itemView.findViewById(R.id.tv_category);
             tvDescription = itemView.findViewById(R.id.tv_description);
             tvLikeCount = itemView.findViewById(R.id.tv_like_count);
-            tvLikeIcon = itemView.findViewById(R.id.tv_like_icon);
+            // GANTI: findViewById ke ImageView, bukan TextView
+            ivLikeIcon = itemView.findViewById(R.id.tv_like_icon);
             tvCommentCount = itemView.findViewById(R.id.tv_comment_count);
             layoutLike = itemView.findViewById(R.id.layout_like);
             layoutComment = itemView.findViewById(R.id.layout_comment);

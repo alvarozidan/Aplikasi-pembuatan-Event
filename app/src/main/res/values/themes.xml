@@ -7,7 +7,26 @@
         <item name="colorOnPrimary">@color/white</item>
         <item name="colorSecondary">@color/secondary</item>
         <item name="colorOnSecondary">@color/white</item>
+        <item name="android:colorBackground">@color/bg_light</item>
+        <item name="colorSurface">@color/surface_light</item>
+        <item name="android:fontFamily">@font/poppins</item>
+        <item name="fontFamily">@font/poppins</item>
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    </style>
+
+    <style name="NavTextActive">
+        <item name="android:textSize">10sp</item>
+        <item name="android:fontFamily">@font/poppins_medium</item>
+    </style>
+
+    <style name="NavTextInactive">
+        <item name="android:textSize">10sp</item>
+        <item name="android:fontFamily">@font/poppins</item>
+    </style>
+
+    <!-- Tambahkan ini sebelum tag </resources> penutup -->
+    <style name="Theme.SchoolEvent.Splash" parent="Base.Theme.SchoolEvent">
+        <item name="android:windowBackground">@color/primary</item>
     </style>
 
     <!-- Tema utama → mewarisi Base.Theme.SchoolEvent -->

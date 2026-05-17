@@ -82,53 +82,46 @@ public class RegisterFragment extends Fragment {
         btnRegister.setEnabled(false);
 
         mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(requireActivity(), task -> {
+                .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        Log.d("REGISTER", "Auth berhasil");
                         String userId = mAuth.getCurrentUser().getUid();
-                        Log.d("REGISTER", "UserId: " + userId);
 
-                        User user = new User(userId, name, email, "user");
+                        // Kirim email verifikasi
+                        mAuth.getCurrentUser()
+                                .sendEmailVerification()
+                                .addOnCompleteListener(verifyTask -> {
+                                    // Simpan data user ke Firestore
+                                    // dengan status verified = false
+                                    User user = new User(userId, name, email, "user");
+                                    db.collection("users")
+                                            .document(userId)
+                                            .set(user)
+                                            .addOnSuccessListener(aVoid -> {
+                                                progressBar.setVisibility(View.GONE);
+                                                btnRegister.setEnabled(true);
 
-                        db.collection("users")
-                                .document(userId)
-                                .set(user)
-                                .addOnSuccessListener(aVoid -> {
-                                    Log.d("REGISTER", "Firestore berhasil");
-                                    progressBar.setVisibility(View.GONE);
-                                    btnRegister.setEnabled(true);
+                                                // Logout dulu sebelum verifikasi
+                                                mAuth.signOut();
 
-                                    mAuth.signOut();
+                                                // Pindah ke halaman tunggu verifikasi
+                                                Bundle args = new Bundle();
+                                                args.putString("email", email);
+                                                EmailVerificationFragment verifyFragment =
+                                                        new EmailVerificationFragment();
+                                                verifyFragment.setArguments(args);
 
-                                    Toast.makeText(getContext(),
-                                            "Registrasi berhasil! Silakan login.",
-                                            Toast.LENGTH_SHORT).show();
-
-                                    if (isAdded() && getActivity() != null) {
-                                        getParentFragmentManager()
-                                                .popBackStack(null,
-                                                        androidx.fragment.app.FragmentManager
-                                                                .POP_BACK_STACK_INCLUSIVE);
-                                        ((MainActivity) getActivity())
-                                                .loadFragment(new LoginFragment());
-                                    }
-                                })
-                                .addOnFailureListener(e -> {
-                                    Log.e("REGISTER", "Firestore gagal: " + e.getMessage());
-                                    progressBar.setVisibility(View.GONE);
-                                    btnRegister.setEnabled(true);
-                                    Toast.makeText(getContext(),
-                                            "Gagal simpan data: " + e.getMessage(),
-                                            Toast.LENGTH_LONG).show();
+                                                ((MainActivity) requireActivity())
+                                                        .loadFragment(verifyFragment);
+                                            });
                                 });
                     } else {
-                        Log.e("REGISTER", "Auth gagal: " + task.getException());
                         progressBar.setVisibility(View.GONE);
                         btnRegister.setEnabled(true);
                         String errorMsg = task.getException() != null
                                 ? task.getException().getMessage()
                                 : "Registrasi gagal";
-                        Toast.makeText(getContext(), errorMsg, Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(),
+                                errorMsg, Toast.LENGTH_LONG).show();
                     }
                 });
     }

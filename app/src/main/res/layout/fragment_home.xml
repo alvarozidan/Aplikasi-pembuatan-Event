@@ -3,26 +3,147 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="?android:attr/windowBackground">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:elevation="0dp"
+        app:elevation="0dp">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
-            app:title="School Event"
-            app:titleTextColor="@android:color/white"/>
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <!-- Logo -->
+                <ImageView
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:src="@mipmap/ic_launcher"
+                    android:scaleType="fitCenter"
+                    android:layout_marginEnd="10dp"
+                    android:contentDescription="Logo"/>
+
+                <!-- Nama App -->
+                <TextView
+                    android:id="@+id/tv_app_title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Smakanza Event"
+                    android:textColor="@android:color/white"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/poppins_bold"
+                    android:clickable="true"
+                    android:focusable="true"/>
+
+                <!-- Profile -->
+                <FrameLayout
+                    android:layout_width="40dp"
+                    android:layout_height="40dp">
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/btn_profile"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:layout_gravity="center"
+                        app:cardCornerRadius="18dp"
+                        app:cardBackgroundColor="#33FFFFFF"
+                        app:cardElevation="0dp">
+
+                        <TextView
+                            android:id="@+id/tv_profile_avatar"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:textColor="@android:color/white"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:text="?"/>
+
+                    </androidx.cardview.widget.CardView>
+
+                    <View
+                        android:id="@+id/view_notification_dot"
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:layout_gravity="top|end"
+                        android:background="@drawable/bg_notification_dot"
+                        android:visibility="gone"/>
+
+                </FrameLayout>
+
+            </LinearLayout>
+        </androidx.appcompat.widget.Toolbar>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorPrimary"
+            android:paddingHorizontal="12dp"
+            android:paddingBottom="8dp"
+            android:gravity="start"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/btn_search"
+                android:layout_width="34dp"
+                android:layout_height="34dp"
+                android:src="@drawable/ic_search"
+                android:padding="4dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:contentDescription="Search"
+                app:tint="@android:color/white"/>
+
+        </LinearLayout>
+
+        <!-- Search bar — GONE by default, muncul saat icon diklik -->
+        <LinearLayout
+            android:id="@+id/layout_search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorPrimary"
+            android:paddingHorizontal="16dp"
+            android:paddingBottom="12dp"
+            android:visibility="gone"
+            android:orientation="vertical">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                app:boxStrokeWidth="0dp"
+                app:boxStrokeWidthFocused="1dp"
+                app:boxStrokeColor="@color/primary"
+                app:hintEnabled="false">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_search"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Cari nama event..."
+                    android:inputType="text"
+                    android:imeOptions="actionSearch"
+                    android:maxLines="1"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
-
-    <!--
-        SwipeRefreshLayout → wrapper agar RecyclerView bisa di-pull to refresh
-        Saat user tarik ke bawah → onRefresh() akan dipanggil
-    -->
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh"
@@ -30,45 +151,58 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <!--
-        RecyclerView → komponen list yang efisien
-        Hanya membuat kartu sebanyak yang terlihat di layar
-        Kartu yang keluar layar di-recycle untuk kartu baru
-        app:layoutBehavior → agar list tidak tertutup toolbar
-    -->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_events"
+        <!-- Wrapper LinearLayout sebagai satu-satunya child SwipeRefresh -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="8dp"
-            android:clipToPadding="false" />
+            android:orientation="vertical">
+
+            <!-- List Event -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_events"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:paddingTop="60dp"
+                android:paddingBottom="80dp"
+                android:clipToPadding="false"/>
+
+        </LinearLayout>
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-    <TextView
+    <!-- Empty state -->
+    <LinearLayout
         android:id="@+id/tv_empty"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="Belum ada event"
-        android:textSize="16sp"
-        android:textColor="?android:attr/textColorSecondary"
-        android:visibility="gone" />
-    <!--
-        FAB → tombol bulat (+) untuk tambah event
-        android:visibility="gone" → disembunyikan dulu
-        Hanya muncul jika user adalah admin
-    -->
+        android:orientation="vertical"
+        android:gravity="center"
+        android:visibility="gone">
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_add_event"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_marginBottom="100dp"
-        android:layout_marginEnd="25dp"
-        android:src="@android:drawable/ic_input_add"
-        android:visibility="gone"
-        android:contentDescription="Tambah Event" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="📭"
+            android:textSize="64sp"
+            android:layout_marginBottom="16dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Belum ada event"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Event akan muncul di sini"
+            android:textSize="14sp"
+            android:textColor="?android:attr/textColorSecondary"/>
+
+    </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

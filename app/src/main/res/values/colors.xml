@@ -1,15 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="primary">#1565C0</color>
-    <color name="primary_dark">#0D47A1</color>
-    <color name="primary_dark_theme">#1976D2</color>
-    <color name="secondary">#FF6F00</color>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <!-- Primary palette -->
+    <color name="primary">#6C63FF</color>
+    <color name="primary_dark">#4B44CC</color>
+    <color name="primary_dark_theme">#8B85FF</color>
+    <color name="primary_container">#EAE9FF</color>
 
-    <color name="text_primary">#212121</color>
-    <color name="text_secondary">#757575</color>
+    <!-- Secondary -->
+    <color name="secondary">#FF6584</color>
+    <color name="secondary_container">#FFE4EA</color>
 
-<!--    Warna badge kategori  -->
-    <color name="badge_bg_light">#E3F2FD</color>
+    <!-- Accent -->
+    <color name="accent_green">#43E97B</color>
+    <color name="accent_orange">#FFB347</color>
+    <color name="accent_blue">#4FC3F7</color>
+
+    <!-- Background -->
+    <color name="bg_light">#F0F2FF</color>
+    <color name="bg_dark">#13111C</color>
+    <color name="surface_light">#FFFFFF</color>
+    <color name="surface_dark">#1E1B2E</color>
+
+    <!-- Glass -->
+    <color name="glass_light">#40FFFFFF</color>
+    <color name="glass_dark">#306C63FF</color>
+    <color name="glassmorphism_overlay">#20FFFFFF</color>
+
+    <!-- Text -->
+    <color name="white">#FFFFFF</color>
+    <color name="text_on_primary">#FFFFFF</color>
+
+    <!-- Navbar item -->
+    <color name="nav_active_night">#FFFFFF</color>
+    <color name="nav_active_light">#13111C</color>
+    <color name="nav_inactive_night">#80FFFFFF</color>
+    <color name="nav_inactive_light">#1E1B2E</color>
+
+    <!--  buat search  -->
+    <color name="search_bar_bg">#1A6750A4</color> <!-- ungu sangat transparan -->
 </resources>

@@ -36,8 +36,9 @@
         android:theme="@style/Theme.SchoolEvent">
 
         <activity
-            android:name=".activities.MainActivity"
-            android:exported="true">
+            android:name=".activities.SplashActivity"
+            android:exported="true"
+            android:theme="@style/Theme.SchoolEvent.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -45,8 +46,22 @@
         </activity>
 
         <activity
+            android:name=".activities.MainActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan"/>
+        <!--
+    adjustPan → layar geser ke atas saat keyboard muncul
+    tapi navbar TIDAK ikut naik
+    Berbeda dengan adjustResize yang mendorong semua layout
+        -->
+
+        <activity
             android:name=".activities.DetailActivity"
             android:exported="false" />
+
+        <activity
+            android:name=".activities.AboutActivity"
+            android:parentActivityName=".activities.MainActivity"/>
 
     </application>
 </manifest>

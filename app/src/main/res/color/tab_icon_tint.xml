@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Tab aktif → putih penuh -->
+    <item android:color="@android:color/white"
+        android:state_selected="true"/>
+    <!-- Tab tidak aktif → putih 50% (sama dengan tabTextColor di XML) -->
+    <item android:color="#80FFFFFF"/>
+</selector>

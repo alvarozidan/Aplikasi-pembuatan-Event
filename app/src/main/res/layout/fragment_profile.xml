@@ -1,129 +1,538 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/swipe_refresh_profile"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fillViewport="true">
+    android:layout_height="match_parent">
 
-    <LinearLayout
+    <ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="24dp">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:padding="24dp"
-            android:layout_marginBottom="24dp">
-            
-            <TextView
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:text="🙍‍♂️"
-                android:textSize="48sp"
-                android:gravity="center"
-                android:layout_marginBottom="16dp" />
-            
-            <TextView
-                android:id="@+id/tv_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="22sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="4dp"
-                android:text="Nama User" />
+            android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/tv_email"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:textColor="?android:attr/textColorSecondary"
-                android:layout_marginBottom="12dp"
-                android:text="email@example.com" />
-
-            <TextView
-                android:id="@+id/tv_role"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="?attr/colorPrimaryContainer"
-                android:textColor="?attr/colorOnPrimaryContainer"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:paddingTop="6dp"
-                android:paddingBottom="6dp"
-                android:textSize="13sp"
-                android:visibility="gone"
-                android:text="Role" />
-                
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="?android:attr/listDivider"
-            android:layout_marginBottom="24dp" />
-        
-<!--        Section: Pengaturan   -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Pengaturan"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="16dp" />
-
-<!--        Toogle Dark Mode    -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_marginBottom="32dp">
-
+            <!-- Header Profile -->
             <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="210dp"
+                android:background="?attr/colorPrimary"
+                android:gravity="center"
                 android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Dark Mode"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
+                <!-- Tombol back di pojok kiri atas -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingStart="8dp"
+                    android:paddingTop="4dp">
+
+                    <ImageButton
+                        android:id="@+id/btn_back"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/ic_arrow_back"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        app:tint="@android:color/white"
+                        android:contentDescription="Kembali"/>
+
+                    <!-- Spacer -->
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:layout_weight="1"/>
+
+                </LinearLayout>
+
+                <!-- Avatar lingkaran -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    app:cardCornerRadius="40dp"
+                    app:cardBackgroundColor="#33FFFFFF"
+                    android:layout_marginBottom="10dp">
+
+                    <!--
+                        GANTI: 👤 (TextView emoji 40sp) → ImageView ic_person
+                        Padding 12dp agar icon tidak terlalu mepet ke pinggir lingkaran
+                        Di Kotlin: jika user punya foto, ganti src dengan Glide/Picasso
+                    -->
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/ic_person"
+                        android:scaleType="centerInside"
+                        android:padding="12dp"
+                        app:tint="@android:color/white"
+                        android:contentDescription="Avatar"/>
+
+                </androidx.cardview.widget.CardView>
 
                 <TextView
+                    android:id="@+id/tv_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Ubah tampilan gelap/terang"
+                    android:textColor="@android:color/white"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="2dp"
+                    android:text="Nama User"/>
+
+                <TextView
+                    android:id="@+id/tv_email"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#B3FFFFFF"
+                    android:textSize="13sp"
+                    android:layout_marginBottom="17dp"
+                    android:text="email@example.com"/>
+
+                <TextView
+                    android:id="@+id/tv_role"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_category_badge"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp"
+                    android:paddingTop="4dp"
+                    android:paddingBottom="4dp"
+                    android:layout_marginBottom="5dp"
+                    android:textColor="@android:color/white"
                     android:textSize="12sp"
-                    android:textColor="?android:attr/textColorSecondary" />
+                    android:visibility="gone"
+                    android:text="Role"/>
+
             </LinearLayout>
 
-            <!--
-                SwitchMaterial → toggle switch dari Material Design
-                Saat digeser → listener akan dipanggil
-            -->
+            <!-- Konten -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="24dp">
 
-            <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/switch_dark_mode"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                <!-- Card Pengaturan -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp"
+                    android:layout_marginBottom="16dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Pengaturan"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="16dp"/>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
+
+                            <!--
+                                GANTI: android:text="🌙 Dark Mode"
+                                → ImageView ic_dark_mode di kiri + TextView label terpisah
+                            -->
+                            <ImageView
+                                android:layout_width="22dp"
+                                android:layout_height="22dp"
+                                android:src="@drawable/ic_dark_mode"
+                                android:layout_marginEnd="12dp"
+                                app:tint="?android:attr/textColorPrimary"
+                                android:contentDescription="Dark Mode"/>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Dark Mode"
+                                    android:textSize="15sp"
+                                    android:textStyle="bold"/>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Ubah tampilan gelap/terang"
+                                    android:textSize="12sp"
+                                    android:textColor="?android:attr/textColorSecondary"/>
+
+                            </LinearLayout>
+
+                            <com.google.android.material.switchmaterial.SwitchMaterial
+                                android:id="@+id/switch_dark_mode"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <!-- Card Event yang Disukai -->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/card_liked_events"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp"
+                    android:layout_marginBottom="16dp"
+                    android:visibility="gone">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <!-- Header -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:layout_marginBottom="12dp">
+
+                            <!--
+                                GANTI: android:text="❤️ Event yang Disukai"
+                                → ImageView ic_favorite di kiri + TextView label
+                            -->
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:src="@drawable/ic_favorite"
+                                android:layout_marginEnd="8dp"
+                                app:tint="#E53935"
+                                android:contentDescription="Disukai"/>
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Event yang Disukai"
+                                android:textSize="15sp"
+                                android:textStyle="bold"/>
+
+                            <!-- Jumlah like → bisa diklik untuk lihat list -->
+                            <TextView
+                                android:id="@+id/tv_liked_count"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0 event"
+                                android:textSize="13sp"
+                                android:textColor="?attr/colorPrimary"
+                                android:textStyle="bold"
+                                android:background="?attr/selectableItemBackgroundBorderless"
+                                android:padding="4dp" />
+
+                        </LinearLayout>
+
+                        <!-- Preview 3 event teratas yang di-like -->
+                        <LinearLayout
+                            android:id="@+id/container_liked_preview"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"/>
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <!-- Card Laporan Saya (untuk user biasa) -->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/card_my_reports"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp"
+                    android:layout_marginBottom="16dp"
+                    android:visibility="gone">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <!-- Header baris atas -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:layout_marginBottom="12dp">
+
+                            <ImageView
+                                android:layout_width="22dp"
+                                android:layout_height="22dp"
+                                android:src="@drawable/ic_bug_report"
+                                android:layout_marginEnd="10dp"
+                                app:tint="?attr/colorPrimary"
+                                android:contentDescription="Laporan"/>
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Laporan Saya"
+                                android:textSize="15sp"
+                                android:textStyle="bold"/>
+
+                            <!-- Clickable "Lihat Semua →" -->
+                            <TextView
+                                android:id="@+id/tv_my_reports_see_all"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Lihat Semua →"
+                                android:textSize="12sp"
+                                android:textColor="?attr/colorPrimary"
+                                android:padding="4dp"/>
+
+                        </LinearLayout>
+
+                        <!-- Preview 2 laporan terakhir -->
+                        <LinearLayout
+                            android:id="@+id/container_my_reports_preview"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"/>
+
+                        <!-- Teks jika belum ada laporan -->
+                        <TextView
+                            android:id="@+id/tv_my_reports_empty"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Belum ada laporan"
+                            android:textSize="13sp"
+                            android:textColor="?android:attr/textColorSecondary"
+                            android:gravity="center"
+                            android:paddingTop="8dp"
+                            android:paddingBottom="4dp"
+                            android:visibility="gone"/>
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <!-- Section Admin → hanya muncul untuk admin -->
+                <LinearLayout
+                    android:id="@+id/layout_admin_section"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    android:layout_marginBottom="16dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <!-- Card Laporan Masuk -->
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/card_reports"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginEnd="8dp"
+                            app:cardCornerRadius="16dp"
+                            app:cardElevation="2dp"
+                            xmlns:app="http://schemas.android.com/apk/res-auto">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:padding="16dp"
+                                android:gravity="center">
+
+                                <!-- GANTI: 🚩 (TextView emoji 32sp) → ImageView ic_flag -->
+                                <ImageView
+                                    android:layout_width="36dp"
+                                    android:layout_height="36dp"
+                                    android:src="@drawable/ic_flag"
+                                    android:layout_marginBottom="8dp"
+                                    app:tint="?attr/colorPrimary"
+                                    android:contentDescription="Laporan"/>
+
+                                <TextView
+                                    android:id="@+id/tv_report_count"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="0"
+                                    android:textSize="28sp"
+                                    android:textStyle="bold"
+                                    android:textColor="?attr/colorPrimary"/>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Laporan Masuk"
+                                    android:textSize="12sp"
+                                    android:textColor="?android:attr/textColorSecondary"
+                                    android:gravity="center"/>
+
+                            </LinearLayout>
+
+                        </androidx.cardview.widget.CardView>
+
+                        <!-- Card Usulan Event -->
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/card_suggestions"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginStart="8dp"
+                            app:cardCornerRadius="16dp"
+                            app:cardElevation="2dp"
+                            xmlns:app="http://schemas.android.com/apk/res-auto">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:padding="16dp"
+                                android:gravity="center">
+
+                                <!-- GANTI: 💡 (TextView emoji 32sp) → ImageView ic_lightbulb -->
+                                <ImageView
+                                    android:layout_width="36dp"
+                                    android:layout_height="36dp"
+                                    android:src="@drawable/ic_lightbulb"
+                                    android:layout_marginBottom="8dp"
+                                    app:tint="?attr/colorSecondary"
+                                    android:contentDescription="Usulan"/>
+
+                                <TextView
+                                    android:id="@+id/tv_suggestion_count"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="0"
+                                    android:textSize="28sp"
+                                    android:textStyle="bold"
+                                    android:textColor="?attr/colorSecondary"/>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Usulan Event"
+                                    android:textSize="12sp"
+                                    android:textColor="?android:attr/textColorSecondary"
+                                    android:gravity="center"/>
+
+                            </LinearLayout>
+
+                        </androidx.cardview.widget.CardView>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginTop="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Kelola Event"
+                            android:textSize="15sp"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="12dp"/>
+
+                        <!--
+                            GANTI: android:text="➕ Tambah Event Baru" → app:icon="@drawable/ic_add"
+                            MaterialButton mendukung app:icon secara native
+                        -->
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btn_add_event_admin"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Tambah Event Baru"
+                            app:icon="@drawable/ic_add"
+                            app:iconGravity="textStart"
+                            android:padding="14dp"
+                            android:textSize="14sp"
+                            app:cornerRadius="12dp"
+                            android:layout_marginBottom="8dp"/>
+
+                        <!--
+                            GANTI: android:text="⚙️ Kelola Event" → app:icon="@drawable/ic_settings"
+                        -->
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btn_manage_event_admin"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Kelola Event"
+                            app:icon="@drawable/ic_settings"
+                            app:iconGravity="textStart"
+                            android:padding="14dp"
+                            android:textSize="14sp"
+                            app:cornerRadius="12dp"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <!-- Tombol Logout -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_logout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Keluar"
+                    app:icon="@drawable/ic_logout"
+                    app:iconGravity="textStart"
+                    android:padding="14dp"
+                    android:textSize="15sp"
+                    app:cornerRadius="12dp"
+                    app:backgroundTint="#F44336"
+                    android:layout_marginTop="8dp"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_delete_account"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Hapus Akun"
+                    app:icon="@drawable/ic_close"
+                    app:iconGravity="textStart"
+                    android:padding="14dp"
+                    android:textSize="15sp"
+                    app:cornerRadius="12dp"
+                    app:backgroundTint="@android:color/transparent"
+                    app:strokeColor="#F44336"
+                    app:strokeWidth="1dp"
+                    android:textColor="#F44336"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="80dp"/>
+
+            </LinearLayout>
 
         </LinearLayout>
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_logout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="LogOut"
-            android:padding="12sp"
-            android:backgroundTint="#F44336" />
-    </LinearLayout>
-
-</ScrollView>
+    </ScrollView>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

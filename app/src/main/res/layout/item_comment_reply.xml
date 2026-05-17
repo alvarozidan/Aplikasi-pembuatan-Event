@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingTop="10dp"
+    android:paddingBottom="4dp"
+    android:paddingStart="8dp">
+
+    <!-- Avatar kecil -->
+    <TextView
+        android:id="@+id/tv_reply_avatar"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:gravity="center"
+        android:textSize="11sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/white"
+        android:background="?attr/colorSecondary"
+        android:layout_marginEnd="8dp"
+        android:text="A"/>
+
+    <!-- Konten balasan -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <!-- Nama & waktu -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="2dp">
+
+            <TextView
+                android:id="@+id/tv_reply_username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="12sp"
+                android:layout_marginEnd="8dp"
+                android:text="Username"/>
+
+            <TextView
+                android:id="@+id/tv_reply_timestamp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="10sp"
+                android:textColor="?android:attr/textColorSecondary"
+                android:text="12:00"/>
+
+        </LinearLayout>
+
+        <!-- Tag @username yang dibalas -->
+        <TextView
+            android:id="@+id/tv_reply_to_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:textColor="?attr/colorPrimary"
+            android:textStyle="bold"
+            android:layout_marginBottom="2dp"
+            android:visibility="gone"
+            android:text="@username"/>
+
+        <!-- Isi balasan -->
+        <TextView
+            android:id="@+id/tv_reply_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:lineSpacingMultiplier="1.4"
+            android:text="Isi balasan"/>
+
+        <!-- Tombol balas untuk reply -->
+        <TextView
+            android:id="@+id/tv_reply_reply_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Balas"
+            android:textSize="11sp"
+            android:textColor="?attr/colorPrimary"
+            android:textStyle="bold"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"/>
+
+    </LinearLayout>
+
+</LinearLayout>

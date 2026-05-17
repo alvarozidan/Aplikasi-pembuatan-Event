@@ -17,6 +17,8 @@ import com.example.schoolevent.activities.MainActivity;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 public class LoginFragment extends Fragment {
 
     private TextInputEditText etEmail, etPassword;
@@ -61,7 +63,7 @@ public class LoginFragment extends Fragment {
         });
     }
 
-    private void loginUser(String email, String password){
+    private void loginUser(String email, String password) {
         progressBar.setVisibility(View.VISIBLE);
         btnLogin.setEnabled(false);
 
@@ -70,19 +72,44 @@ public class LoginFragment extends Fragment {
                     progressBar.setVisibility(View.GONE);
                     btnLogin.setEnabled(true);
 
-                    if(task.isSuccessful()){
-                        Toast.makeText(getContext(),
-                                "Login Berhasil",
-                                Toast.LENGTH_SHORT).show();
+                    if (task.isSuccessful()) {
+                        FirebaseUser user = mAuth.getCurrentUser();
 
+                        // Cek apakah email sudah diverifikasi
+                        if (user != null && !user.isEmailVerified()) {
+                            // Belum verifikasi → logout & arahkan ke halaman verifikasi
+                            mAuth.signOut();
+
+                            Toast.makeText(getContext(),
+                                    "Email belum diverifikasi!\nCek inbox kamu.",
+                                    Toast.LENGTH_LONG).show();
+
+                            // Arahkan ke halaman verifikasi
+                            Bundle args = new Bundle();
+                            args.putString("email", email);
+                            EmailVerificationFragment verifyFragment =
+                                    new EmailVerificationFragment();
+                            verifyFragment.setArguments(args);
+                            ((MainActivity) requireActivity())
+                                    .loadFragment(verifyFragment);
+                            return;
+                        }
+
+                        // Email sudah terverifikasi → login berhasil
+                        Toast.makeText(getContext(),
+                                "Login Berhasil!", Toast.LENGTH_SHORT).show();
                         ((MainActivity) requireActivity()).updateNavbar();
-                        ((MainActivity) requireActivity()).setNavbarSelected(R.id.nav_home);
-                        ((MainActivity) requireActivity()).loadFragment(new HomeFragment());
-                    }else {
+                        ((MainActivity) requireActivity())
+                                .setNavbarSelected(R.id.nav_home);
+                        ((MainActivity) requireActivity())
+                                .loadFragment(new HomeFragment());
+
+                    } else {
                         String errorMsg = task.getException() != null
                                 ? task.getException().getMessage()
                                 : "Login gagal";
-                        Toast.makeText(getContext(), errorMsg, Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(),
+                                errorMsg, Toast.LENGTH_LONG).show();
                     }
                 });
     }

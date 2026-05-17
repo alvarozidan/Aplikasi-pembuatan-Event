@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- state_selected = true → sudah like → merah -->
+    <item android:color="#E53935" android:state_selected="true"/>
+    <!-- default → belum like → hitam -->
+    <item android:color="@android:color/black"/>
+</selector>

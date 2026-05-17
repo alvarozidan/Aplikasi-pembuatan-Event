@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.schoolevent"
-        minSdk = 23
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -36,11 +36,14 @@ dependencies {
     // Glide → untuk load & tampilkan gambar dari URL/storage
     // CalendarView Material → kalender yang lebih bagus
 
+    implementation("com.kizitonwose.calendar:view:2.5.0")
     implementation("com.github.bumptech.glide:glide:4.16.0")
     implementation("com.google.firebase:firebase-storage")
-    implementation("com.prolificinteractive:material-calendarview:1.4.3")
     implementation("androidx.appcompat:appcompat:1.7.1")
+    implementation("androidx.viewpager2:viewpager2:1.0.0")
+    implementation("com.github.Dimezis:BlurView:version-2.0.5")
     implementation("com.google.android.material:material:1.13.0")
+    implementation("com.google.android.material:material:1.12.0")
     implementation("androidx.constraintlayout:constraintlayout:2.2.1")
     implementation("androidx.recyclerview:recyclerview:1.3.2")
     implementation("androidx.cardview:cardview:1.0.0")
