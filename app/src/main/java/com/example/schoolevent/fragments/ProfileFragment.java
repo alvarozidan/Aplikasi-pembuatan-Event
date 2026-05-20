@@ -183,7 +183,7 @@ public class ProfileFragment extends Fragment {
                         currentUserRole = role;
 
                         tvName.setText(name);
-                        tvName.setText(email);
+                        tvEmail.setText(email);
 
                         if("admin".equals(role)){
                             tvRole.setText("👑 Admin");

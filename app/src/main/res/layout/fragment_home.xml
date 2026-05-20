@@ -125,9 +125,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                app:boxStrokeWidth="0dp"
-                app:boxStrokeWidthFocused="1dp"
-                app:boxStrokeColor="@color/primary"
+                app:boxStrokeWidth="1.5dp"
+                app:boxStrokeWidthFocused="2dp"
+                app:boxStrokeColor="@android:color/white"
+                app:boxBackgroundColor="#33FFFFFF"
                 app:hintEnabled="false">
 
                 <com.google.android.material.textfield.TextInputEditText
